@@ -23,6 +23,10 @@ def backup_file
     File.expand_path File.join(directory, filename)
 end
 
+def ftb_server
+    config[server_nickname].fetch('ftb_server')
+end
+
 def craftbukkit_server
     config[server_nickname].fetch('craftbukkit_server')
 end
@@ -60,6 +64,7 @@ namespace :server do
 
     desc "Backup the Minecraft Server"
     task :backup do
+        send_command('say Starting backup, may be some lag.')
         send_command('save-off')
         sleep(1)
         send_command('save-all')
@@ -78,6 +83,8 @@ namespace :server do
         system "tmux new -s #{server_nickname} -d"
         if craftbukkit_server == true
           send_command("cd #{minecraft_directory}; java -Xmx1024M -Xms1024M -jar craftbukkit.jar -o true")
+        elsif ftb_server == true
+          send_command("cd #{minecraft_directory}; java -server -Xms2048m -Xmx3072m -XX:PermSize=256m -XX:+UseParNewGC -XX:+UseConcMarkSweepGC -jar FTBServer-#{minecraft_version}.jar nogui")
         else
           send_command("cd #{minecraft_directory}; java -Xmx1024M -Xms1024M -jar minecraft_server.jar nogui")
         end

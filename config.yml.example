@@ -4,6 +4,7 @@
 # # top level is server nickname (shouldnt have spaces)
 myworld:
     craftbukkit_server:         true
+    ftb_server:                 false
     minecraft_server_directory: "/home/minecraft/server"
     world_dir_name:             "My World"
     backup_directory:           "/home/minecraft/backups/server"
