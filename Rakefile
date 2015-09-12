@@ -136,6 +136,7 @@ namespace :render do
     desc "Render the Minecraft Server using Minecraft Overviewer"
     task :update => [:setup] do
         # if no render.lock (use same one for render/poi)
+        send_command('say Starting map render, may be some lag.')
         send_command('save-off')
         sleep(1)
         send_command('save-all')
@@ -145,8 +146,8 @@ namespace :render do
         system("cp -pr " + quoted_world_dir + "/* " + temporary_render_location)
         send_command('save-on')
         sleep(1)
-        system "python2", "#{rakefile_directory}/Minecraft-Overviewer/overviewer.py", "--config=#{rakefile_directory}/#{server_nickname}-mco-config.py"
-        system "rm", "-rf", temporary_render_location
+        system "nice python2", "#{rakefile_directory}/Minecraft-Overviewer/overviewer.py", "--config=#{rakefile_directory}/#{server_nickname}-mco-config.py"
+        system "rm", "-rf", Shellwords.escape(temporary_render_location)
         send_command("say The render has been updated.")
         sleep(1)
     end
